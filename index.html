@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>桂林山水行 · 你的专属攻略</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #388e3c;
+      --primary-light: #6abf69;
+      --secondary: #0288d1;
+      --bg: #f8faf8;
+      --card: #ffffff;
+      --text: #2c3e50;
+      --shadow: 0 4px 20px rgba(0,0,0,0.08);
+      --radius: 16px;
+    }
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #e6f7ee 0%, #f0f9ff 100%);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 25px 20px;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(56,142,60,0.05) 0%, transparent 70%);
+      z-index: 0;
+    }
+    h1 {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    .subtitle {
+      color: var(--secondary);
+      font-size: 1.1rem;
+      position: relative;
+      z-index: 1;
+    }
+    .day-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-top: 4px solid var(--primary);
+    }
+    .day-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+    }
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .day-title {
+      font-size: 1.4rem;
+      color: var(--primary);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .day-title i {
+      background: var(--primary-light);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    .itinerary-item {
+      display: flex;
+      margin: 14px 0;
+      padding-left: 12px;
+      border-left: 2px solid var(--primary-light);
+    }
+    .time {
+      font-weight: 600;
+      color: var(--secondary);
+      min-width: 80px;
+      font-size: 0.95rem;
+    }
+    .activity {
+      flex: 1;
+      font-size: 1.05rem;
+    }
+    
+    /* 替换区域样式 */
+    .replace-section {
+      background: #f0f9ff;
+      border: 2px dashed #b3e5fc;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      position: relative;
+    }
+    .replace-section::before {
+      content: "✨ 选则新行程吧";
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      background: white;
+      padding: 0 10px;
+      font-size: 0.85rem;
+      color: var(--secondary);
+      font-weight: 600;
+    }
+    .replace-label {
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    select#replace-select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #c5e1a5;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      background: white;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    select#replace-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(56,142,60,0.2);
+    }
+    .save-status {
+      text-align: right;
+      font-size: 0.9rem;
+      color: #66bb6a;
+      margin-top: 8px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .save-status.show {
+      opacity: 1;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #7f8c8d;
+      font-size: 0.95rem;
+      padding: 20px;
+    }
+    @media (max-width: 600px) {
+      .itinerary-item {
+        flex-direction: column;
+        gap: 6px;
+      }
+      .time {
+        min-width: auto;
+        font-weight: bold;
+      }
+      h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-mountain"></i> 桂林山水行</h1>
+      <p class="subtitle"> 我们的第一次旅行！！！</p>
+    </header>
+
+    <!-- Day 1 -->
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-title"><i>1</i> 第一天：桂林经典</div>
+      </div>
+      <div class="itinerary-item">
+        <div class="time">7:30-9:00</div>
+        <div class="activity">象鼻山（1号门进 → 2号门出，免费需预约）</div>
+      </div>
+      <div class="itinerary-item">
+        <div class="time">9:30-12:00</div>
+        <div class="activity">正阳步行街 & 东西巷（午餐+伴手礼）</div>
+      </div>
+      <div class="itinerary-item">
+        <div class="time">14:00</div>
+        <div class="activity">靖江王府外观（红墙拍照）</div>
+      </div>
+      <div class="itinerary-item">
+        <div class="time">16:00</div>
+        <div class="activity">叠彩山爬山（或伏波山，轻松登顶）</div>
+      </div>
+      <div class="itinerary-item">
+        <div class="time">19:30</div>
+        <div class="activity">日月双塔夜景（亮灯后远观）</div>
+      </div>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-title"><i>2</i> 第二天：古镇+山水</div>
+      </div>
+      <div class="itinerary-item">
+        <div class="time">9:00-11:00</div>
+        <div class="activity">大圩古镇（青石板老街，马蹄糕）</div>
+      </div>
+      
+      <div class="replace-section">
+        <div class="replace-label">
+          <i class="fas fa-sync-alt"></i> 替代原“古东瀑布”的景点：
+        </div>
+        <select id="replace-select">
+          <option value="冠岩景区">✅ 冠岩景区（溶洞+小火车+漓江游船）</option>
+          <option value="草坪回族乡">🌿 草坪回族乡（漓江第一湾，人少景美）</option>
+          <option value="毛洲岛">🏝️ 毛洲岛（乘船登岛，农家乐体验）</option>
+        </select>
+        <div class="save-status" id="save-status">已保存！</div>
+      </div>
+
+      <div class="itinerary-item">
+        <div class="time">12:00-14:30</div>
+        <div class="activity" id="dynamic-activity">冠岩景区游览</div>
+      </div>
+      <div class="itinerary-item">
+        <div class="time">16:00</div>
+        <div class="activity">抵达兴坪古镇，放行李 + 找化妆店</div>
+      </div>
+      <div class="itinerary-item">
+        <div class="time">18:30</div>
+        <div class="activity">晚餐：随心吃！</div>
+      </div>
+    </div>
+
+<!-- Day 3 (Updated) -->
+<div class="day-card">
+  <div class="day-header">
+    <div class="day-title"><i>3</i> 第三天：相公山日出 + 漓江精华</div>
+  </div>
+  <div class="itinerary-item">
+    <div class="time">4:30</div>
+    <div class="activity">起床，包车前往相公山（车程约40分钟）</div>
+  </div>
+  <div class="itinerary-item">
+    <div class="time">5:30-7:30</div>
+    <div class="activity">相公山观日出（山顶风大，务必带防风外套+帽子）</div>
+  </div>
+  <div class="itinerary-item">
+    <div class="time">9:00</div>
+    <div class="activity">返回兴坪古镇化妆（主线任务:寻找传说中的化妆店吧!）</div>
+  </div>
+  <div class="itinerary-item">
+    <div class="time">10:30-12:00</div>
+    <div class="activity">
+      <strong>漓江竹筏：朝板山码头 → 九马画山（往返）</strong><br>
+      ✅ 船上可清晰看到<strong>20元人民币背景</strong>和<strong>九马画山</strong><br>
+      ⚠️ <em>无需上岸，全程在竹筏上观景</em>
+    </div>
+  </div>
+  <div class="itinerary-item">
+    <div class="time">13:00</div>
+    <div class="activity">午餐后，可步行至<strong>20元背景广场</strong>（兴坪镇内）近距离拍照</div>
+  </div>
+  <div class="itinerary-item">
+    <div class="time">15:00-17:00</div>
+    <div class="activity">兴坪游园：老寨山（登顶俯瞰全景）、古戏台、百年古榕</div>
+  </div>
+  <div class="itinerary-item">
+    <div class="time">18:00</div>
+    <div class="activity">前往阳朔西街，入住酒店 + 逛吃夜生活</div>
+  </div>
+</div>
+
+    <!-- Day 4 -->
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-title"><i>4</i> 第四天：阳朔深度</div>
+      </div>
+      <div class="itinerary-item">
+        <div class="time">8:00-9:30</div>
+        <div class="activity">银子岩景区（“游了银子岩，一世不缺钱”）</div>
+      </div>
+      <div class="itinerary-item">
+        <div class="time">10:30-12:00</div>
+        <div class="activity">遇龙河漂流（金龙桥→旧县段，提前购票！）</div>
+      </div>
+      <div class="itinerary-item">
+        <div class="time">13:00-17:00</div>
+        <div class="activity">十里画廊电动车环线：<br>凤鸣停车场 → 工农桥 → 月亮山 → 栖溪民宿 → 遇龙水韵 → 朝阳水坝 → 一尺稻田咖啡 → 富里桥</div>
+      </div>
+      <div class="itinerary-item">
+        <div class="time">19:30</div>
+        <div class="activity">桂林千古情演出（提前30分钟入场）</div>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2026 你的AI旅行助手 · 所有修改已自动保存至本机</p>
+      <p>✨ 刷新页面或关闭后再打开，行程依然保留！</p>
+    </footer>
+  </div>
+
+  <script>
+    // 替代景点数据
+    const replacements = {
+      "冠岩景区": "冠岩景区游览",
+      "草坪回族乡": "草坪回族乡游览（漓江第一湾）",
+      "毛洲岛": "毛洲岛登岛体验"
+    };
+
+    // DOM 元素
+    const selectEl = document.getElementById('replace-select');
+    const activityEl = document.getElementById('dynamic-activity');
+    const statusEl = document.getElementById('save-status');
+
+    // 从 localStorage 加载保存的选择
+    function loadSavedSelection() {
+      const saved = localStorage.getItem('guilin-replace-option');
+      if (saved && replacements[saved]) {
+        selectEl.value = saved;
+        updateActivityText(saved);
+      }
+    }
+
+    // 更新活动描述
+    function updateActivityText(value) {
+      activityEl.textContent = replacements[value] || value + '游览';
+    }
+
+    // 显示保存状态
+    function showSaved() {
+      statusEl.classList.add('show');
+      setTimeout(() => statusEl.classList.remove('show'), 2000);
+    }
+
+    // 监听选择变化
+    selectEl.addEventListener('change', () => {
+      const selected = selectEl.value;
+      updateActivityText(selected);
+      localStorage.setItem('guilin-replace-option', selected);
+      showSaved();
+    });
+
+    // 初始化
+    loadSavedSelection();
+  </script>
+</body>
+</html>
